@@ -18,29 +18,27 @@ class Variant(models.Model):
 
 	name = fields.Char()
 	libelle = fields.Char(string = "libelle(afficher sur le site)")
-	nb_line = fields.Integer(compute="_compute_nb_line", readonly="1")
-	var_material_id = fields.Many2many('configurateur.material', string = "material")
-
-	def _compute_nb_line(self):
-		for record in self:
-			record.nb_line = 5
-
-	@api.onchange('line_ids')
-	def _update_nb_line(self):
-		for record in self:
-			record.nb_line = len(record.line_ids)
+	material_ids = fields.One2many('configurateur.material', 'variant_id',string = "material")
 
 
 class Line_variant(models.Model):
 	_name="configurateur_product.line"
 	_rec_name = 'name'
 
-	name = fields.Char()
+	name = fields.Char(string="reference")
 	libelle = fields.Char(string = "libelle(afficher sur le site)")
 	image = fields.Binary("Image", attachment=True, help="This field holds the image used as image for the product, limited to 1024x1024px.")
 	icon = fields.Binary("Image", attachment=True, help="This field holds the image used as image for the product, limited to 1024x1024px.")
 	extra_price = fields.Float("supplément", default=0)
+	material_id = fields.Many2one('configurateur.material','line_ids', visible="0")
+	variant_string = fields.Char(compute="_compute_variant_string")
 	
+	@api.depends('material_id')
+	def _compute_variant_string(self):
+		for record in self:
+			record.variant_string = record.material_id.variant_id.libelle
+			print("test")
+
 	@api.onchange('icon')
 	def _update_icon(self):
 		for record in self:
@@ -53,8 +51,9 @@ class variant_material(models.Model):
 
 	name = fields.Char()
 	libelle = fields.Char(string = "libelle")
-	line_ids = fields.Many2many('configurateur_product.line', string="Liste des changement")
-	href_id = fields.Char(compute="_compute_href", readonly="1")
+	line_ids = fields.One2many('configurateur_product.line', 'material_id',string="Liste des changement")
+	href_id = fields.Char(compute="_compute_href", readonly="1", visible="0")
+	variant_id = fields.Many2one('configurateur_product.variant',visible="0")
 
 	def _compute_href(self):
 		for record in self:
@@ -70,7 +69,7 @@ class SaleOrderLine(models.Model):
 	_inherit="sale.order.line"
 
 	extra_config = fields.Monetary(string="extra config price")
-	config = fields.Many2one("configurateur.config")
+	config = fields.Many2one("configurateur.config", readonly="1", visible="0")
 	variant_line_ids = fields.Many2many("configurateur_product.line")
 
 class SaleOrder(models.Model):

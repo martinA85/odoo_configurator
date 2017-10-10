@@ -14,7 +14,6 @@
                         <field name="variant_ids" attrs="{'readonly': [('is_configurable', '=', False)]}">
                             <tree>
                                 <field name="name" />
-                                <field name="nb_line" />
                             </tree>
                         </field>
                         <group>
@@ -35,6 +34,7 @@
                 <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="after">
                     <field name="variant_line_ids" string="Configuration">
                         <tree>
+                            <field name="variant_string"/>
                             <field name="name"/>
                         </tree>
                     </field>
@@ -52,10 +52,9 @@
                     <group>
                         <field name="name" />
                         <field name="libelle" />
-                        <field name="nb_line" />
                     </group>
                     <group>
-                        <field name="var_material_id">
+                        <field name="material_ids">
                             <tree>
                                 <field name="name" />
                                 <field name="libelle" />

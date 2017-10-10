@@ -65,7 +65,7 @@
                         <div class="tab-content" style="background-color:rgba(194,194,194,0.5);border:1px solid transparent;">
                             <t t-foreach="product.variant_ids" t-as="p_variant">
                                 <div t-att-id="p_variant.name" class="tab-pane fade">
-                                    <t t-foreach="p_variant.var_material_id" t-as="material">
+                                    <t t-foreach="p_variant.material_ids" t-as="material">
                                         <div class="row panel-default" style="margin-left:10px;margin-top:5px;margin-bottom:5px;">
                                             <div class="panel-heading" style="margin-right:25px;">
                                                 <h4 t-att-href="material.href_id" data-toggle="collapse" class="panel-title expand">
@@ -137,11 +137,11 @@
                                     <hr/>
                                     <t t-foreach="variants" t-as="variant">
                                         <div class="col-sm-10 col-sm-offset-1">
-                                            <h4>Intituler de la variant : <span t-field="variant.name"/></h4>
+                                            <h4><span t-field="variant.variant_string" /> : <span t-field="variant.name"/></h4>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-2 col-sm-offset-1">
-                                                <span t-field="product.image" t-field-options='{"widget": "image","class": "oe_avatar cfg_img","style":"100px;height:100px"}'/>
+                                                <span t-field="variant.icon" t-field-options='{"widget": "image","class": "oe_avatar cfg_img","style":"100px;height:100px"}'/>
                                             </div>
                                             <div class="col-sm-3 col-sm-offset-6">
                                                 <p>+<span t-field="variant.extra_price"/>€</p>
