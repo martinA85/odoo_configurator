@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_configurateur_product_variant,access_configurateur_product_variant,model_configurateur_product_variant,,1,0,0,0
+access_configurateur_product_material,access_configurateur_material,model_configurateur_material,,1,0,0,0
+access_configurateur_product_line,access_configurateur_line,model_configurateur_product_line,,1,0,0,0
+access_configurateur_config,access_configurateur_config,model_configurateur_config,,1,0,0,0

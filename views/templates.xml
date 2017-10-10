@@ -1,0 +1,108 @@
+<odoo>
+    <data>
+        <record id="product_template_only_form_view" model="ir.ui.view">
+
+        <field name="name">product.template.inherit</field>
+        <field name="model">product.template</field>
+        <field name="priority">16</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales']" position="after">
+                <page name="configuration" string="Configurateur">
+                    <group>
+                        <field name="is_configurable" />
+                        <field name="variant_ids" attrs="{'readonly': [('is_configurable', '=', False)]}">
+                            <tree>
+                                <field name="name" />
+                                <field name="nb_line" />
+                            </tree>
+                        </field>
+                        <group>
+                            <field name="background" widget="image" string="Image de fond : " attrs="{'invisible': [('is_configurable', '=', False)]}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+      </record>
+
+
+        <record id="sale_order_form_config" model="ir.ui.view">
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="priority">16</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="after">
+                    <field name="variant_line_ids" string="Configuration">
+                        <tree>
+                            <field name="name"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="variant_form_view" model="ir.ui.view">
+
+        <field name="name">variant_from_view</field>
+        <field name="model">configurateur_product.variant</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="libelle" />
+                        <field name="nb_line" />
+                    </group>
+                    <group>
+                        <field name="var_material_id">
+                            <tree>
+                                <field name="name" />
+                                <field name="libelle" />
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+
+    </record>
+
+    <record id="line_variant_form_view" model="ir.ui.view">
+
+        <field name="name">line_variant_from_view</field>
+        <field name="model">configurateur_product.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="libelle" />
+                        <field name="extra_price" />
+                        <group>
+                            <field name="image" widget="image"/>
+                        </group>
+                        <group>
+                            <field name="icon" widget="image" string="Icon"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="website_sale_insert_config" model="ir.ui.view">
+        <field name="inherit_id" ref="website_sale.product"/>
+        <field name="arch" type="xml">
+          <xpath expr="//form" position="after">
+            <t t-if="is_configurable">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <field name="background" widget="image" />
+                </div>
+            </t>
+          </xpath>
+        </field>
+    </record>
+
+    </data>
+</odoo>

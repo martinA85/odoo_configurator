@@ -1,0 +1,203 @@
+<odoo>
+    <data>
+        <template id="website_product_configurator" inherit_id="website_sale.product" customize_show="True" name="Configurator">
+            <xpath expr="//span[@t-field='product.image']" position="replace">
+                <t t-if="not product.is_configurable">
+                  <span itemprop="image" t-field="product.image" t-options="{'widget': 'image', 'class': 'product_detail_img', 'alt-field': 'name', 'zoom': 'image'}" groups="!website_sale.group_website_multi_image"/>
+                </t>
+            </xpath> 
+            <xpath expr="//div[@id='product_details']" position="before">
+                <t t-if="product.is_configurable">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h2>Configurateur</h2>
+                            <input type="hidden" t-att-value="product.is_configurable" id="is_configurable"/>
+                            <input type="hidden" t-att-value="product.price" id="prod_price"/>
+                            <div id="config_out" style="margin-top:7%;">
+                                <span t-field="product.background" t-field-options='{"widget": "image","class": "oe_avatar cfg_img unactive", "style": "position:relative;width:100%; height:auto;margin-bottom:5%;"}' />
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-sm-offset-1" style="margin-top:10%;">
+                            <div class="panel panel-default" id="summary_line">
+                                <div class="panel-heading">
+                                    <h4 class="text-center" style="margin:10%">Votre <span t-field="product.name"/></h4>
+                                </div>
+                                <div class="panel-body">
+                                    <t t-foreach="product.variant_ids" t-as="p_variant">
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-sm-1">
+                                                    <h5><span t-field="p_variant.name" />:</h5>
+                                                </div>
+                                                <div class="col-sm-7 col-sm-offset-2">
+                                                    <h5 class="var_out"><p></p><input type="hidden" t-att-value="p_variant.name"/></h5>
+                                                </div>
+                                                <div class="col-sm-1 text-center">
+                                                    <input type="hidden" t-att-value="p_variant.name"/>
+                                                    <button class="btn btn-xs btn-danger pull-right del-variant">x</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr style="margin:5px 0 5px 0;"/>
+                                    </t>
+                                </div>
+                                <div class="panel-footer">
+                                    <h4 class="text-center"><span id="price_out"></span> €</h4>
+                                    <form action="/shop/config/recap">
+                                        <input name="product_id" id="product_id" t-att-value="product.id" type="hidden"/>
+                                        <input name="variant_lst" id="variant_lst" type="hidden"/>
+                                        <button class="btn btn-default" id="checkout_config">Commander</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </t>
+            </xpath>
+            <xpath expr="//div[@id='product_details']" position="before">
+                <t t-if="product.is_configurable">
+                    <div class="row">
+                        <nav class="navbar navbar-default" style="margin-bottom:0%;">
+                            <ul id="tabs-menu" class="nav navbar-nav">
+                                <li t-foreach="product.variant_ids" t-as="p_variant"><a t-attf-href="#" data-toggle="tab"><span t-field="p_variant.name"/></a></li>
+                            </ul>
+                        </nav>
+                        <div class="tab-content" style="background-color:rgba(194,194,194,0.5);border:1px solid transparent;">
+                            <t t-foreach="product.variant_ids" t-as="p_variant">
+                                <div t-att-id="p_variant.name" class="tab-pane fade">
+                                    <t t-foreach="p_variant.var_material_id" t-as="material">
+                                        <div class="row panel-default" style="margin-left:10px;margin-top:5px;margin-bottom:5px;">
+                                            <div class="panel-heading" style="margin-right:25px;">
+                                                <h4 t-att-href="material.href_id" data-toggle="collapse" class="panel-title expand">
+                                                    <div class="right-arrow pull-right">+</div>
+                                                    <a href="#">
+                                                        <span t-field="material.libelle"/>
+                                                        <!-- <i class="fa fa-sort-down" aria-hidden="true"></i> -->
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div t-att-id="material.id" class="collapse panel-collapse" 
+                                                style="background-color:rgba(255,255,255,1);;margin-right:25px;">
+                                                <ul style="padding-left:10px;">
+                                                    <t t-foreach="material.line_ids" t-as="v_line">
+                                                        <li style="display:inline-block;">
+                                                            <div t-att-class="p_variant.name">
+                                                                <span t-field="v_line.icon" t-field-options='{"widget": "image","class": "oe_avatar cfg_img unactive_var variant_img", "style":"100px;height:100px"}'/>
+                                                                <input type="hidden" t-att-value="v_line.libelle" id="line_libelle"/>
+                                                                <input type="hidden" t-att-value="v_line.extra_price"/>
+                                                                <input type="hidden" t-att-value="v_line.id"/>
+                                                            </div>
+                                                            <p class="text-center">+<span t-field="v_line.extra_price"/>€</p>
+                                                        </li>
+                                                    </t>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </xpath>
+            <xpath expr="//a[@id='add_to_cart']" position="replace">
+                <div t-if="product.is_configurable">
+                 </div>
+                <t t-if="not product.is_configurable">
+                    <a id="add_to_cart" class="btn btn-primary btn-lg mt8 js_check_product a-submit" href="#">Add to Cart</a>
+              </t>
+            </xpath>
+        </template>
+
+        <template id="recap_config" name="recap_config">
+            <t t-call="website.layout">
+                <t t-set="title">Recap de la configuration</t>
+                    <div class="oe_structure">
+                         <div class="container" style="background-color:white; padding-bottom:7%; padding-top:1%">
+                            <div class="col-sm-10 col-sm-offset-1">
+                               <div>
+                                    <h2><span t-field="product.name"/></h2>
+                                    <span t-field="product.image" t-field-options='{"widget": "image","class": "oe_avatar cfg_img"}'/>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading text-center">
+                                        <div>
+                                            <h3>Votre Configuraton</h3>
+                                        </div>
+                                    </div> 
+                                    <div class="panel-body">
+                                    <div class="col-sm-10 col-sm-offset-1">
+                                        <h4>Produit  : <span t-field="product.name"/></h4>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3 col-sm-offset-9">
+                                            <p>+<span t-field="product.lst_price"/>€</p>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <t t-foreach="variants" t-as="variant">
+                                        <div class="col-sm-10 col-sm-offset-1">
+                                            <h4>Intituler de la variant : <span t-field="variant.name"/></h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-2 col-sm-offset-1">
+                                                <span t-field="product.image" t-field-options='{"widget": "image","class": "oe_avatar cfg_img","style":"100px;height:100px"}'/>
+                                            </div>
+                                            <div class="col-sm-3 col-sm-offset-6">
+                                                <p>+<span t-field="variant.extra_price"/>€</p>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                    </t>
+                                    </div>
+                                <div class="panel-footer">
+                                    <p class="text-right">Total : <span t-field="config.total_price"/>€</p>
+                                </div>
+                            </div>
+                            <form action="/shop/cart/update" method="POST">
+                                <input name="product_id" id="product_id" t-att-value="product.product_variant_id.id if len(product.product_variant_ids) == 1 else '0'" type="hidden"/>
+                                <input name="config" t-att-value="config.id" type="hidden"/>
+                                <input class="btn btn-default" type="submit" value="Ajouter au pannier"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+        <template id="website_product_configurator_qte" inherit_id="website_sale.product_quantity" customize_show="True" name="configurator_qte">
+            
+                <xpath expr="//div[@class='css_quantity input-group oe_website_spinner']" position="replace">
+                    <div t-if="not product.is_configurable">
+                        <div class="css_quantity input-group oe_website_spinner" contenteditable="false">
+                            <a t-attf-href="#" class="mb8 input-group-addon js_add_cart_json">
+                                <i class="fa fa-minus"/>
+                            </a>
+                            <input type="text" class="form-control" data-min="1" name="add_qty" value="1"/>
+                            <a t-attf-href="#" class="mb8 input-group-addon float_left js_add_cart_json">
+                                <i class="fa fa-plus"/>
+                            </a>
+                        </div>
+                    </div>
+                </xpath>
+        </template>
+        <template id="web_layout_style" inherit_id="web.layout" customize_show="True" name="web_layout_style">
+            <xpath expr="//meta[@name='viewport']" position="after">
+                <t t-if="product">
+                    <t t-if="product.is_configurable">
+                        <style>
+                            body{
+                                background-image: url("http://imgshare.free.fr/uploads/f05328cf5a.png");
+                            }
+                        </style>
+                    </t>
+                </t>
+            </xpath>
+        </template> 
+    </data>
+
+    <template id="js_frontend" name="Product Configurator" inherit_id="website.assets_frontend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/configOdoo/static/js/config.js"></script>
+        </xpath>
+    </template>
+</odoo>
