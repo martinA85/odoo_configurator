@@ -39,7 +39,8 @@ class ConfigurateurProduct(http.Controller):
                 selected_variant.append(variant)
                 config_var_ids.append(variant.id)
                 config_price += variant.extra_price
-                var_img = Image.open(BytesIO(base64.b64decode(variant.image)))
+                var_img = Image.open(BytesIO(base64.b64decode(variant.image))).convert("RGBA")
+                var_img.convert('RGB')
                 config_image.paste(var_img, (0,0),var_img)
             except:
                 pass
