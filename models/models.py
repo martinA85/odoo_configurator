@@ -64,6 +64,7 @@ class ConfigProduct(models.Model):
 
 	total_price = fields.Float("Cout Total", default=0)
 	variant_line_ids = fields.Many2many("configurateur_product.line")
+	config_image = fields.Binary("Image", attachment=True)
 
 class SaleOrderLine(models.Model):
 	_inherit="sale.order.line"

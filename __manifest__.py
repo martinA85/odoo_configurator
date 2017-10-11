@@ -22,6 +22,10 @@
     # any module necessary for this one to work correctly
     'depends': ['base','product', 'website_sale', 'website'],
 
+    "external_dependencies": {
+        'python': ['PIL','io']
+    },
+
     # always loaded
     'data': [
         'security/ir.model.access.csv',

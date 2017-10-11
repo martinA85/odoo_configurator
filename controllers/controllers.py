@@ -2,6 +2,10 @@
 from odoo import http
 from odoo.http import request
 import ipdb
+from PIL import Image
+import io
+from io import BytesIO
+import base64
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 
 class ConfigurateurProduct(http.Controller):
@@ -20,8 +24,9 @@ class ConfigurateurProduct(http.Controller):
 
     	# variant_template is a variant_product line
     	variant_template = env['configurateur_product.line']
-
         config = env['configurateur.config']
+
+        config_image = Image.open(BytesIO(base64.b64decode(product.background)))
 
         config_string = ""
         config_price = product.list_price
@@ -34,14 +39,23 @@ class ConfigurateurProduct(http.Controller):
                 selected_variant.append(variant)
                 config_var_ids.append(variant.id)
                 config_price += variant.extra_price
+                var_img = Image.open(BytesIO(base64.b64decode(variant.image)))
+                config_image.paste(var_img, (0,0),var_img)
             except:
                 pass
 
         # ipdb.set_trace()
+        print(type(config_image))
+
+        in_nem_file = io.BytesIO()
+        config_image.save(in_nem_file, format="png")
+        in_nem_file.seek(0)
+        config_image = base64_encoded_result_bytes = base64.b64encode(in_nem_file.read())
 
         vals = {
             'total_price':str(config_price),
-            'variant_line_ids':[(6,0,config_var_ids)]
+            'variant_line_ids':[(6,0,config_var_ids)],
+            'config_image' : config_image
         }
 
         config = config.create(vals)
