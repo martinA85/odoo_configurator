@@ -18,7 +18,7 @@
                                     <span t-field="product.background" t-field-options='{"widget": "image","class": "oe_avatar cfg_img unactive", "style": "position:relative;width:100%; height:auto;margin-bottom:5%;"}' />
                                 </div>
                             </div>
-                            <div class="col-sm-3 col-sm-offset-1 config_tab" style="margin-top:10%;">
+                            <div class="col-sm-4 config_tab" style="margin-top:10%;">
                                 <div class="panel panel-default" id="summary_line">
                                     <div class="panel-heading">
                                         <h4 class="text-center" style="margin:10%">Votre <span t-field="product.name"/></h4>
@@ -31,7 +31,7 @@
                                                         <h5><span t-field="p_variant.name" />:</h5>
                                                     </div>
                                                     <div class="col-sm-7 col-sm-offset-2">
-                                                        <h5 class="var_out"><p class="variant_str_recap"></p> + <span class="variant_extra_recap"></span><input type="hidden" t-att-value="p_variant.name" class="variant_name_recap"/></h5>
+                                                        <h5 class="var_out"><span class="variant_str_recap">Vide</span> + <span class="variant_extra_recap">0</span>€<input type="hidden" t-att-value="p_variant.name" class="variant_name_recap"/></h5>
                                                     </div>
                                                     <div class="col-sm-1 text-center">
                                                         <input type="hidden" t-att-value="p_variant.name"/>
@@ -75,7 +75,7 @@
                                                 <div class="col-sm-4">
                                                     <div t-att-class="p_variant.name">
                                                         <div class="row">
-                                                            <h5 style="padding-top:17px"><span t-field="p_variant.name"/>: <span class="variant_str_recap"></span></h5>
+                                                            <h5 style="padding-top:17px"><span t-field="p_variant.name"/>: <span class="variant_str_recap">Vide</span></h5>
                                                             <div class="" style="">
                                                                 <input type="hidden" t-att-value="p_variant.name" class="variant_name_recap"/>
                                                                 <button class="btn btn-xs btn-danger pull-right del-variant" style="margin-top:-28px;margin-right:40px">x</button>
@@ -85,7 +85,7 @@
                                                             <h5 class="var_out" style=""><img class="variant_img_recap" style="height:60px;width:120px;margin-right:45px;;object-fit:cover;" src="/configOdoo/static/img/empty.png"/><input type="hidden" t-att-value="p_variant.name"/><span class="ref_output col-sm-10" style="padding-left:10px;font-size:11px"/></h5>
                                                         </div>
                                                         <div class="text-center">
-                                                            <p>+<span class="variant_extra_recap"> - </span>€</p>
+                                                            <p style="margin-right:34px;">+<span class="variant_extra_recap"> 0 </span>€</p>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -31,7 +31,6 @@
         'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
-        'views/template_front_v.xml',
         'views/templates_front.xml'
     ],
     # 'application': True,

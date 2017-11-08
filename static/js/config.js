@@ -115,7 +115,7 @@ function updateImage(element, parent){
         divImg.id= layer;
         backgroundDiv.insertBefore(divImg, backgroundDiv.firstChild);
         layerImg = document.createElement("img");
-        layerImg.style = "position:absolute;width:96.3%; height:auto;z-index:1;";
+        layerImg.style = "position:absolute; height:auto;z-index:1;";
         layerImg.src = newSrc;
         divImg.appendChild(layerImg);
       }
@@ -180,8 +180,8 @@ function clearConfig(){
   //second step : delete variant info in summary tab
   //*this is the clicked button
   variant_tab = this.parentElement.parentElement.parentElement;
-  variant_tab.getElementsByClassName("variant_str_recap")[0].innerHTML = "";
-  variant_tab.getElementsByClassName("variant_extra_recap")[0].innerHTML = " - ";
+  variant_tab.getElementsByClassName("variant_str_recap")[0].innerHTML = "Vide";
+  variant_tab.getElementsByClassName("variant_extra_recap")[0].innerHTML = " 0 ";
   
   if(layout == "v"){
     variant_tab.getElementsByClassName("variant_img_recap")[0].src = "/configOdoo/static/img/empty.png";

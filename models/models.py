@@ -9,7 +9,7 @@ class Product(models.Model):
 	is_configurable = fields.Boolean(string="Configurable", index=True, default=False)
 
 	variant_ids = fields.Many2many('configurateur_product.variant', string="Variantes")
-	background = fields.Binary("Image", attachment=True, help="This field holds the image used as image for the product, limited to 1024x1024px.")
+	background = fields.Binary("Image", attachment=True, help="770px max width for horizontal layout, 570 px max width for vertical layout")
 	layout = fields.Selection([('v','Vertricale'),('h','Horizontale')])
 	
 class Variant(models.Model):
@@ -26,7 +26,7 @@ class Line_variant(models.Model):
 
 	name = fields.Char(string="reference")
 	libelle = fields.Char(string = "libelle(afficher sur le site)")
-	image = fields.Binary("Image", attachment=True, help="This field holds the image used as image for the product, limited to 1024x1024px.")
+	image = fields.Binary("Image", attachment=True, help="770px max width for horizontal layout, 570 px max width for vertical layout")
 	icon = fields.Binary("Image", attachment=True, help="This field holds the image used as image for the product, limited to 1024x1024px.")
 	extra_price = fields.Float("supplément", default=0)
 	material_id = fields.Many2one('configurateur.material','line_ids', visible="0")
