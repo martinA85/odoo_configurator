@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, tools
-import ipdb
 
 # Herite du model produit pour rajouter un champ configurable
 class Product(models.Model):
@@ -11,8 +10,8 @@ class Product(models.Model):
 
 	variant_ids = fields.Many2many('configurateur_product.variant', string="Variantes")
 	background = fields.Binary("Image", attachment=True, help="This field holds the image used as image for the product, limited to 1024x1024px.")
-
-
+	layout = fields.Selection([('v','Vertricale'),('h','Horizontale')])
+	
 class Variant(models.Model):
 	_name="configurateur_product.variant"
 
@@ -37,13 +36,6 @@ class Line_variant(models.Model):
 	def _compute_variant_string(self):
 		for record in self:
 			record.variant_string = record.material_id.variant_id.libelle
-			print("test")
-
-	@api.onchange('icon')
-	def _update_icon(self):
-		for record in self:
-			resized_images = tools.image_get_resized_images(record.icon, return_big=True, avoid_resize_medium=True)
-			record.icon = resized_images['image_small']
 
 
 class variant_material(models.Model):

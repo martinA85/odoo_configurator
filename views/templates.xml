@@ -18,6 +18,7 @@
                         </field>
                         <group>
                             <field name="background" widget="image" string="Image de fond : " attrs="{'invisible': [('is_configurable', '=', False)]}"/>
+                            <field name="layout"></field>
                         </group>
                     </group>
                 </page>
