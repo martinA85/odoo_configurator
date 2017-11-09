@@ -11,7 +11,7 @@ class ConfigurateurProduct(http.Controller):
     
 
     @http.route(['/shop/config/recap'], type='http', auth="public", website=True)
-    def recap_config(self, variant_lst, product_id):
+    def recap_config(self, variant_lst, product_id, salable):
 
     	variant_id = variant_lst.split(',')
     	# var env is environement variable that we use to browse our object
@@ -63,7 +63,8 @@ class ConfigurateurProduct(http.Controller):
 
             'variants':selected_variant,
             'product':product,
-            'config':config
+            'config':config,
+            'salable':salable
         }
         return request.render("configOdoo.recap_config",values)
 
@@ -95,3 +96,24 @@ class SaleSite(WebsiteSale):
                 line.price_unit += line.extra_config
 
         return to_return
+        
+        
+    @http.route(['/shop/config/valid_request'], type='http', auth="public", website=True)
+    def valid_request(self, contact_name, phone, email_form, config, product_id):
+        
+        name = "Demande devis site web : "+contact_name
+        
+        config_tmp = self.env['configurateur.config']
+    	config = config_tmp.browse(int(config))
+        
+        vals = {
+            "name" : name,
+            "contact_name" : contact_name,
+            "phone" : phone,
+            "email_from": email_form,
+            "variant_line_ids": config.variant_line_ids
+        }
+        
+        request.env['crm.lead'].create(vals)
+        
+        return request.render("configOdoo.thanks_page")

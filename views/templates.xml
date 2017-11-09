@@ -18,6 +18,7 @@
                         </field>
                         <group>
                             <field name="background" widget="image" string="Image de fond : " attrs="{'invisible': [('is_configurable', '=', False)]}"/>
+                            <field name="config_salable"></field>
                             <field name="layout"></field>
                         </group>
                     </group>
@@ -42,6 +43,22 @@
                 </xpath>
             </field>
         </record>
+        
+        <!--<record id="crm.lead_form_config" model="ir.ui.view">-->
+        <!--    <field name="model">crm.lead</field>-->
+        <!--    <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>-->
+        <!--    <field name="priority">16</field>-->
+        <!--    <field name="arch" type="xml">-->
+        <!--        <xpath expr="//*[@id='notebook_page_16']/textarea[1]" position="after">-->
+        <!--            <field name="variant_line_ids" string="Configuration">-->
+        <!--                <tree>-->
+        <!--                    <field name="variant_string"/>-->
+        <!--                    <field name="name"/>-->
+        <!--                </tree>-->
+        <!--            </field>-->
+        <!--        </xpath>-->
+        <!--    </field>-->
+        <!--</record>-->
 
         <record id="variant_form_view" model="ir.ui.view">
 

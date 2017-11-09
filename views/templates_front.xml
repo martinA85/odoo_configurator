@@ -42,12 +42,13 @@
                                             <hr style="margin:5px 0 5px 0;"/>
                                         </t>
                                     </div>
-                                    <div class="panel-footer">
+                                    <div class="panel-footer text-center">
                                         <h4 class="text-center"><span id="price_out"></span> €</h4>
                                         <form action="/shop/config/recap">
                                             <input name="product_id" id="product_id" t-att-value="product.id" type="hidden"/>
                                             <input name="variant_lst" id="variant_lst" type="hidden"/>
-                                            <button class="btn btn-default" id="checkout_config">Commander</button>
+                                            <input name="salable" type="hiddent" t-att-value="product.config_salable"/>
+                                            <button class="btn btn-success" id="checkout_config">Commander</button>
                                         </form>
                                     </div>
                                 </div>
@@ -96,6 +97,7 @@
                                         <form action="/shop/config/recap">
                                             <input name="product_id" id="product_id" t-att-value="product.id" type="hidden"/>
                                             <input name="variant_lst" id="variant_lst" type="hidden"/>
+                                            <input name="salable" type="hidden" t-att-value="product.config_salable"/>
                                             <button class="btn btn-success" id="checkout_config">Commander</button>
                                         </form>
                                         </div>
@@ -248,11 +250,36 @@
                                         </tr>
                                     </tfooter>
                                 </table>
-                            <form action="/shop/cart/update" method="POST" style="text-align:right">
-                                <input name="product_id" id="product_id" t-att-value="product.product_variant_id.id if len(product.product_variant_ids) == 1 else '0'" type="hidden"/>
-                                <input name="config" t-att-value="config.id" type="hidden"/>
-                                <input class="btn btn-success" type="submit" value="Ajouter au pannier" style="padding:5px"/>
-                            </form>
+                            <t t-if="not salable">
+                                <form action="/shop/config/ask_qutoation" method="POST" style="text-align:right">
+                                    <input name="product_id" id="product_id" t-att-value="product.product_variant_id.id if len(product.product_variant_ids) == 1 else '0'" type="hidden"/>
+                                    <input name="config" t-att-value="config.id" type="hidden"/>
+                                    <div class="form-group">
+                                        <label for="contact_name">Nom : </label>
+                                        <input class="form-control" name="contact_name" type="text" placeholder="Votre nom" t-att-value="request.params.get('contact_name', '')"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Telephone : </label>
+                                        <input class="form-control" name="phone" type="text" placeholder="Numéro de telephone" t-att-value="request.params.get('phone', '')"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email_form">Email : </label>
+                                        <input class="form-control" name="email_form" type="text" placeholder="Votre email" t-att-value="request.params.get('email_from', '')"/>
+                                    </div>
+                                    <input class="form-control" name="description" id="config_str" type="hidden"/>
+                                    <!--<input type="text" class="form-control o_website_form_input" name="partner_name" required="" t-att-value="request.params.get('partner_name', '')"/>-->
+                                    <div class="row pull-right" style="margin-top:25px;">
+                                        <input class="btn btn-success" type="submit" value="Valider la demande" id="valid_request" style="margin:15px;"/>
+                                    </div>
+                                </form>
+                            </t>
+                            <t t-if="salable">
+                                <form action="/shop/cart/update" method="POST" style="text-align:right">
+                                    <input name="product_id" id="product_id" t-att-value="product.product_variant_id.id if len(product.product_variant_ids) == 1 else '0'" type="hidden"/>
+                                    <input name="config" t-att-value="config.id" type="hidden"/>
+                                    <input class="btn btn-success" type="submit" value="Ajouter au pannier" style="padding:5px"/>
+                                </form>
+                            </t>
                         </div>
                     </div>
                 </div>

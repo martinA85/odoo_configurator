@@ -11,6 +11,7 @@ class Product(models.Model):
 	variant_ids = fields.Many2many('configurateur_product.variant', string="Variantes")
 	background = fields.Binary("Image", attachment=True, help="770px max width for horizontal layout, 570 px max width for vertical layout")
 	layout = fields.Selection([('v','Vertricale'),('h','Horizontale')])
+	config_salable = fields.Boolean(string="Salable", default=False, help="If the product is salable, customer will be able to add the product to cart, if the product is not salable, customer will be able to ask for a quotation")
 	
 class Variant(models.Model):
 	_name="configurateur_product.variant"
@@ -86,4 +87,10 @@ class SaleOrder(models.Model):
     		return {"line_id":order_line.id, 'quantity':1}
     	else:
     		return to_return
+    		
+    		
+class Lead(models.Model):
+	_inherit = "crm.lead"
+	
+	variant_line_ids = fields.Many2many("configurateur_product.line")
 
